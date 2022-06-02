@@ -166,6 +166,7 @@ public class CategoryController {
 		}
 		Pageable pageable = new PageRequest(page, size);
 		List<Categories> obj = CategoriesDetailsRepository.findAllCategories();
+		System.out.println(" obj "+obj.size());
 		if(!obj.isEmpty())
 		{
 		Page<Categories> result= new PageImpl<Categories>(obj, pageable, obj.size());

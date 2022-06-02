@@ -11,6 +11,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.http.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,14 +23,18 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.HttpStatusCodeException;
 
+import com.amazonaws.services.kms.model.NotFoundException;
 import com.ecom.core.domain.JsonObjectFormat;
 import com.ecom.core.dto.BaughtProducts;
 import com.ecom.core.dto.Cart;
@@ -44,6 +49,7 @@ import com.ecom.core.repository.DiscountRepository;
 import com.ecom.core.repository.OrderRepository;
 import com.ecom.core.repository.ProductsRepository;
 import com.ecom.core.repository.WalletReposiory;
+import com.ecom.core.util.CustomeException;
 import com.ecom.core.util.FireBaseNotifications;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -488,5 +494,21 @@ public class OrderController {
 	    
 		}
 		
+	@GetMapping("/orderById/{id}")
+	public Orders getOrderByOrderId(@PathVariable(value="id") Long id){
+		Orders order=OrderRepository.findById(id);
+		
+		order.setOrderTotal(100L);
+		return OrderRepository.save(order);
+		
+	}
+	
+	
+//	@ExceptionHandler(NotFoundException.class)
+//	public ResponseEntity<?> getCustomeException(NotFoundException exp) throws JsonProcessingException{
+//		 CustomeException ex=new CustomeException();
+//		 ex.setMessage(ex.getMessage());
+//		 ex.setStatus(HttpStatusCodeE);
+//	}
 
 }
